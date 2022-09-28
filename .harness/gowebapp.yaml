@@ -49,27 +49,28 @@ pipeline:
                           arch: amd64
                         - os: windows
                           arch: amd64
-              - step:
-                  type: GCSUpload
-                  name: Upload binary artifacts
-                  identifier: Upload_binary_artifacts
-                  spec:
-                    connectorRef: GCP_Sales
-                    bucket: luke-pipeline-outputs
-                    sourcePath: go-web-app/dist
-                    target: <+account.name>/<+project.identifier>/<+pipeline.name>/<+pipeline.sequenceId>/artifacts/
-              - step:
-                  type: BuildAndPushDockerRegistry
-                  name: Publish docker image
-                  identifier: Publish_docker_image
-                  spec:
-                    connectorRef: Github_Container_Registry
-                    repo: ghcr.io/ldhertert/go-web-app
-                    tags:
-                      - latest
-                      - <+pipeline.sequenceId>
-                    dockerfile: go-web-app/Dockerfile
-                    context: go-web-app
+              - parallel:
+                  - step:
+                      type: GCSUpload
+                      name: Upload binary artifacts
+                      identifier: Upload_binary_artifacts
+                      spec:
+                        connectorRef: GCP_Sales
+                        bucket: luke-pipeline-outputs
+                        sourcePath: go-web-app/dist
+                        target: <+account.name>/<+project.identifier>/<+pipeline.name>/<+pipeline.sequenceId>/artifacts/
+                  - step:
+                      type: BuildAndPushDockerRegistry
+                      name: Publish docker image
+                      identifier: Publish_docker_image
+                      spec:
+                        connectorRef: Github_Container_Registry
+                        repo: ghcr.io/ldhertert/go-web-app
+                        tags:
+                          - latest
+                          - <+pipeline.sequenceId>
+                        dockerfile: go-web-app/Dockerfile
+                        context: go-web-app
           infrastructure:
             type: KubernetesDirect
             spec:
