@@ -42,7 +42,7 @@ pipeline:
                   spec:
                     connectorRef: GCP_Sales
                     bucket: luke-pipeline-outputs
-                    sourcePath: go-web-app/dist/*
+                    sourcePath: go-web-app/dist
                     target: <+account.name>/<+project.identifier>/<+pipeline.name>/<+pipeline.sequenceId>/artifacts/
               - step:
                   type: BuildAndPushDockerRegistry
