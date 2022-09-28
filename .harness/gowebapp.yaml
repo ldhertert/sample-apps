@@ -38,8 +38,8 @@ pipeline:
                       ls -lh
                       ls -lh ./dist
                     envVariables:
-                      GOOS: darwin
-                      GOARCH: amd64
+                      GOOS: <+matrix.platform.os>
+                      GOARCH: <+matrix.platform.arch>
                   failureStrategies: []
                   strategy:
                     matrix:
@@ -67,8 +67,8 @@ pipeline:
                       name: Publish docker image
                       identifier: Publish_docker_image
                       spec:
-                        connectorRef: Github_Container_Registry
-                        repo: ghcr.io/ldhertert/go-web-app
+                        connectorRef: Luke_dockerhub
+                        repo: ldhertert/go-web-app
                         tags:
                           - latest
                           - <+pipeline.sequenceId>
