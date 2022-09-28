@@ -29,7 +29,6 @@ pipeline:
                     image: golang:1.16-alpine
                     shell: Sh
                     command: |-
-                      echo "<+matrix.platforms>"
                       echo "<+matrix>"
                       env
 
@@ -39,8 +38,8 @@ pipeline:
                       ls -lh
                       ls -lh ./dist
                     envVariables:
-                      GOOS: <+matrix.os>
-                      GOARCH: <+matrix.arch>
+                      GOOS: darwin
+                      GOARCH: amd64
                   failureStrategies: []
                   strategy:
                     matrix:
