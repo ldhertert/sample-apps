@@ -29,13 +29,9 @@ pipeline:
                     image: golang:1.16-alpine
                     shell: Sh
                     command: |-
-                      echo "<+matrix>"
-                      env
-
                       cd go-web-app
-                      go build -o ./dist/
+                      go build -o "./dist/<+pipeline.name>_${GOOS}_${GOARCH}"
                       pwd
-                      ls -lh
                       ls -lh ./dist
                     envVariables:
                       GOOS: <+matrix.platforms.os>
@@ -46,8 +42,6 @@ pipeline:
                       platforms:
                         - os: darwin
                           arch: amd64
-                        - os: darwin
-                          arch: arm
                         - os: linux
                           arch: amd64
                         - os: windows
