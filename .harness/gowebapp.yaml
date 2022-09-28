@@ -30,11 +30,25 @@ pipeline:
                     shell: Sh
                     command: |-
                       cd go-web-app
-                      go build -o dist/go-web-app
+                      go build -o ./dist/
                       pwd
                       ls -lh
                       ls -lh ./dist
+                    envVariables:
+                      GOOS: <+matrix.platform.os>
+                      GOARCH: <+matrix.platform.arch>
                   failureStrategies: []
+                  strategy:
+                    matrix:
+                      platforms:
+                        - os: darwin
+                          arch: amd64
+                        - os: darwin
+                          arch: arm
+                        - os: linux
+                          arch: amd64
+                        - os: windows
+                          arch: amd64
               - step:
                   type: GCSUpload
                   name: Upload binary artifacts
