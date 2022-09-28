@@ -29,14 +29,18 @@ pipeline:
                     image: golang:1.16-alpine
                     shell: Sh
                     command: |-
+                      echo "<+matrix.platforms>"
+                      echo "<+matrix>"
+                      env
+
                       cd go-web-app
                       go build -o ./dist/
                       pwd
                       ls -lh
                       ls -lh ./dist
                     envVariables:
-                      GOOS: <+matrix.platform.os>
-                      GOARCH: <+matrix.platform.arch>
+                      GOOS: <+matrix.os>
+                      GOARCH: <+matrix.arch>
                   failureStrategies: []
                   strategy:
                     matrix:
