@@ -38,8 +38,8 @@ pipeline:
                       ls -lh
                       ls -lh ./dist
                     envVariables:
-                      GOOS: <+matrix.platform.os>
-                      GOARCH: <+matrix.platform.arch>
+                      GOOS: <+matrix.platforms.os>
+                      GOARCH: <+matrix.platforms.arch>
                   failureStrategies: []
                   strategy:
                     matrix:
