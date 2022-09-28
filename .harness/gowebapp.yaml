@@ -30,7 +30,7 @@ pipeline:
                     shell: Sh
                     command: |-
                       cd go-web-app
-                      go build -o "./dist/<+pipeline.name>_${GOOS}_${GOARCH}"
+                      go build -o "./dist/<+pipeline.name>.${GOOS}.${GOARCH}"
                       pwd
                       ls -lh ./dist
                     envVariables:
@@ -42,6 +42,8 @@ pipeline:
                       platforms:
                         - os: darwin
                           arch: amd64
+                        - os: darwin
+                          arch: arm64
                         - os: linux
                           arch: amd64
                         - os: windows
