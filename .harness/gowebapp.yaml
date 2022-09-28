@@ -1,0 +1,63 @@
+pipeline:
+  name: go-web-app
+  identifier: gowebapp
+  projectIdentifier: Default
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: Luke_Github
+        repoName: sample-apps
+        build: <+input>
+  stages:
+    - stage:
+        name: Build and push
+        identifier: Build_and_push
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Build
+                  identifier: Build
+                  spec:
+                    connectorRef: Luke_dockerhub
+                    image: golang:1.16-alpine
+                    shell: Sh
+                    command: |-
+                      cd go-web-app
+                      go build -o dist/go-web-app
+                  failureStrategies: []
+              - step:
+                  type: GCSUpload
+                  name: Upload binary artifacts
+                  identifier: Upload_binary_artifacts
+                  spec:
+                    connectorRef: GCP_Sales
+                    bucket: luke-pipeline-outputs
+                    sourcePath: go-web-app/dist/**.*
+                    target: <+account.name>/<+project.identifier>/<+pipeline.name>/<+pipeline.sequenceId>/artifacts/
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: Publish docker image
+                  identifier: Publish_docker_image
+                  spec:
+                    connectorRef: Github_Container_Registry
+                    repo: ghcr.io/ldhertert/go-web-app
+                    tags:
+                      - latest
+                      - <+pipeline.sequenceId>
+                    dockerfile: go-web-app/Dockerfile
+                    context: go-web-app
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: GKE_Sales
+              namespace: luke
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
