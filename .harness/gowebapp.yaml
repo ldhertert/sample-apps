@@ -31,6 +31,9 @@ pipeline:
                     command: |-
                       cd go-web-app
                       go build -o dist/go-web-app
+                      pwd
+                      ls -lh
+                      ls -lh ./dist
                   failureStrategies: []
               - step:
                   type: GCSUpload
@@ -39,7 +42,7 @@ pipeline:
                   spec:
                     connectorRef: GCP_Sales
                     bucket: luke-pipeline-outputs
-                    sourcePath: go-web-app/dist/**.*
+                    sourcePath: go-web-app/dist/**
                     target: <+account.name>/<+project.identifier>/<+pipeline.name>/<+pipeline.sequenceId>/artifacts/
               - step:
                   type: BuildAndPushDockerRegistry
