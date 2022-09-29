@@ -78,3 +78,92 @@ pipeline:
               automountServiceAccountToken: true
               nodeSelector: {}
               os: Linux
+    - stage:
+        name: azure-web-app-deploy
+        identifier: azurewebappdeploy
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: AzureWebApp
+          service:
+            serviceRef: gowebappazureappservice
+            serviceInputs:
+              serviceDefinition:
+                type: AzureWebApp
+                spec:
+                  artifacts:
+                    primary:
+                      type: DockerRegistry
+                      spec:
+                        tag: <+input>
+          environment:
+            environmentRef: staging
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: gowebappappservicestaging
+          execution:
+            steps:
+              - step:
+                  name: Slot Deployment
+                  identifier: slotDeployment
+                  type: AzureSlotDeployment
+                  timeout: 20m
+                  spec:
+                    webApp: ng-app-service
+                    deploymentSlot: ng-app-service-staging
+              - step:
+                  type: HarnessApproval
+                  name: Wait to shift traffic
+                  identifier: Wait_to_shift_traffic
+                  spec:
+                    approvalMessage: Please review the following information and approve the pipeline progression
+                    includePipelineExecutionHistory: true
+                    approvers:
+                      userGroups:
+                        - account._account_all_users
+                      minimumCount: 1
+                      disallowPipelineExecutor: false
+                    approverInputs: []
+                  timeout: 1d
+              - step:
+                  name: Traffic shift
+                  identifier: trafficShift
+                  type: AzureTrafficShift
+                  timeout: 20m
+                  spec:
+                    traffic: "20"
+              - step:
+                  type: HarnessApproval
+                  name: Wait to swap slots
+                  identifier: Wait_to_swap_slots
+                  spec:
+                    approvalMessage: Please review the following information and approve the pipeline progression
+                    includePipelineExecutionHistory: true
+                    approvers:
+                      userGroups:
+                        - account._account_all_users
+                      minimumCount: 1
+                      disallowPipelineExecutor: false
+                    approverInputs: []
+                  timeout: 1d
+              - step:
+                  name: Swap slots
+                  identifier: swapSlots
+                  type: AzureSwapSlot
+                  timeout: 20m
+                  spec:
+                    targetSlot: ng-app-service
+            rollbackSteps:
+              - step:
+                  name: WebApp rollback
+                  identifier: webAppRollback
+                  type: AzureWebAppRollback
+                  timeout: 20m
+                  spec: {}
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
