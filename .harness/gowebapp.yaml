@@ -115,40 +115,12 @@ pipeline:
                     webApp: ng-app-service
                     deploymentSlot: ng-app-service-staging
               - step:
-                  type: HarnessApproval
-                  name: Wait to shift traffic
-                  identifier: Wait_to_shift_traffic
-                  spec:
-                    approvalMessage: Please review the following information and approve the pipeline progression
-                    includePipelineExecutionHistory: true
-                    approvers:
-                      userGroups:
-                        - account._account_all_users
-                      minimumCount: 1
-                      disallowPipelineExecutor: false
-                    approverInputs: []
-                  timeout: 1d
-              - step:
                   name: Traffic shift
                   identifier: trafficShift
                   type: AzureTrafficShift
                   timeout: 20m
                   spec:
                     traffic: "20"
-              - step:
-                  type: HarnessApproval
-                  name: Wait to swap slots
-                  identifier: Wait_to_swap_slots
-                  spec:
-                    approvalMessage: Please review the following information and approve the pipeline progression
-                    includePipelineExecutionHistory: true
-                    approvers:
-                      userGroups:
-                        - account._account_all_users
-                      minimumCount: 1
-                      disallowPipelineExecutor: false
-                    approverInputs: []
-                  timeout: 1d
               - step:
                   name: Swap slots
                   identifier: swapSlots
