@@ -167,6 +167,7 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
+        variables: []
   variables:
     - name: build
       type: String
