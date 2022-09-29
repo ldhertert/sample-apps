@@ -80,7 +80,7 @@ pipeline:
               os: Linux
         when:
           pipelineStatus: Success
-          condition: <+pipeline.variables.build> == "false"
+          condition: <+pipeline.variables.build> == "true"
     - stage:
         name: azure-web-app-deploy
         identifier: azurewebappdeploy
