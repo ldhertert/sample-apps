@@ -126,7 +126,7 @@ pipeline:
                   type: AzureSwapSlot
                   timeout: 20m
                   spec:
-                    targetSlot: "luke-app-service-demo\t"
+                    targetSlot: luke-app-service-demo
             rollbackSteps:
               - step:
                   name: WebApp rollback
