@@ -97,7 +97,7 @@ pipeline:
                     primary:
                       type: DockerRegistry
                       spec:
-                        tag: <+pipeline.stages.Build_and_push.spec.execution.steps.Publish_docker_image.artifact-Publish_docker_image.stepArtifacts.publishedImageArtifacts[1].tag>
+                        tag: <+input>
           environment:
             environmentRef: staging
             deployToAll: false
