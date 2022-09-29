@@ -80,7 +80,6 @@ pipeline:
               os: Linux
         when:
           pipelineStatus: Success
-          condition: <+pipeline.variables.build> == "true"
     - stage:
         name: azure-web-app-deploy
         identifier: azurewebappdeploy
@@ -112,8 +111,8 @@ pipeline:
                   type: AzureSlotDeployment
                   timeout: 20m
                   spec:
-                    webApp: ng-app-service
-                    deploymentSlot: ng-app-service-staging
+                    webApp: luke-app-service-demo
+                    deploymentSlot: luke-app-service-demo-luke-app-service-demo-staging
               - step:
                   name: Traffic shift
                   identifier: trafficShift
@@ -127,7 +126,7 @@ pipeline:
                   type: AzureSwapSlot
                   timeout: 20m
                   spec:
-                    targetSlot: ng-app-service
+                    targetSlot: "luke-app-service-demo\t"
             rollbackSteps:
               - step:
                   name: WebApp rollback
