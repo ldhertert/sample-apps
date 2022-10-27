@@ -15,7 +15,7 @@ functions:
       - httpApi:
           path: /tello
           method: get  
-#package:
-#  artifact: ${param:artifact}       
+package:
+  artifact: ${param:artifact}       
 #plugins:
 #  - serverless-deployment-bucket@latest
