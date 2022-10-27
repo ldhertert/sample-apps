@@ -1,10 +1,11 @@
 "use strict";
-module.exports.hello = async (event) => {
+
+module.exports.func1 = async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(
       {
-        message: "Go Serverless v2.0! Your function er executed successfully!",
+        message: "Luke's function",
         input: event,
       },
       null,
