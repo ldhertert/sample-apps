@@ -16,6 +16,6 @@ functions:
           path: /tello
           method: get  
 package:
-  artifact: ${param.artifact, '<+artifact.path>'}
+  artifact: ${param:artifact, '<+artifact.path>'}
 plugins:
   - serverless-deployment-bucket@latest
