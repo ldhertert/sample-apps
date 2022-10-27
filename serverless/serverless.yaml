@@ -10,12 +10,12 @@ functions:
   hello:
     handler: handler.hello
     environment:
-      SAMPLE_ENV_VAR: ${param:sampleEnvVar, 'default value'}
+      SAMPLE_ENV_VAR: ${param:env, '<+pipeline.name>'}
     events:
       - httpApi:
           path: /tello
           method: get  
 package:
-  artifact: ${param:artifact}       
-#plugins:
-#  - serverless-deployment-bucket@latest
+  artifact: <+artifact.path>      
+plugins:
+  - serverless-deployment-bucket@latest
