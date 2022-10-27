@@ -1,0 +1,19 @@
+service: tello
+frameworkVersion: '2 || 3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+functions:
+  hello:
+    handler: handler.hello
+    environment:
+      SAMPLE_ENV_VAR: ${param:env, '<+pipeline.name>'}
+    events:
+      - httpApi:
+          path: /tello
+          method: get  
+package:
+  artifact: ${param:artifact, '<+artifact.path>'}
+plugins:
+  - serverless-deployment-bucket@latest
