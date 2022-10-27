@@ -1,6 +1,6 @@
 
 
-service: <+service.name>
+service: tello
 frameworkVersion: '2 || 3'
 
 provider:
@@ -9,11 +9,13 @@ provider:
 functions:
   hello:
     handler: handler.hello
+    environment:
+      SAMPLE_ENV_VAR: ${param:sampleEnvVar, 'default value'}
     events:
       - httpApi:
           path: /tello
           method: get  
 package:
-  artifact: <+artifact.path>          
+  artifact: ${param:artifact}       
 plugins:
   - serverless-deployment-bucket@latest
