@@ -1,3 +1,4 @@
+/*
 "use strict";
 
 module.exports.hello = async (event) => {
@@ -13,3 +14,4 @@ module.exports.hello = async (event) => {
     ),
   };
 };
+*/
